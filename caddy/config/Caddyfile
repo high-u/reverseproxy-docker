@@ -1,0 +1,30 @@
+{
+  debug
+  local_certs
+  auto_https disable_redirects
+  admin 0.0.0.0:2019
+}
+
+lowcode.priv:80 {
+  reverse_proxy node-red:1880
+}
+lowcode.priv:443 {
+  tls internal
+  reverse_proxy node-red:1880
+}
+
+hasura.graphql.priv:80 {
+  reverse_proxy hasura:8080
+}
+hasura.graphql.priv:443 {
+  tls internal
+  reverse_proxy hasura:8080
+}
+
+adminer.graphql.priv:80 {
+  reverse_proxy adminer:8080
+}
+adminer.graphql.priv:443 {
+  tls internal
+  reverse_proxy adminer:8080
+}

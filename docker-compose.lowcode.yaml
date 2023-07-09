@@ -1,0 +1,12 @@
+version: '3'
+services:
+  node-red:
+    image: nodered/node-red
+    environment:
+      - TZ=Asia/Tokyo
+    networks:
+      - reverseproxy
+    restart: unless-stopped
+networks:
+  reverseproxy:
+    external: true

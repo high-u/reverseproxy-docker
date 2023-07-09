@@ -1,0 +1,37 @@
+version: '3'
+services:
+  hasura:
+    image: hasura/graphql-engine:latest
+    expose:
+      - 8080
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+    networks:
+      - hasura
+      - reverseproxy
+  postgres:
+    container_name: postgres
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    restart: unless-stopped
+    networks:
+      - hasura
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    networks:
+      - hasura
+      - reverseproxy
+networks:
+  hasura:
+  reverseproxy:
+    external: true

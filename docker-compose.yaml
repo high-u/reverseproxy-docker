@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  caddy:
+    image: caddy:alpine
+    container_name: caddy
+    restart: unless-stopped
+    networks:
+      - reverseproxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+      - $PWD/caddy/config/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/caddy/authorities:/data/caddy/pki/authorities/local
+#  dnsmasq:
+#    image: pengshp/dnsmasq
+#    restart: unless-stopped
+#    networks:
+#      - reverseproxy
+#    ports:
+#      - 127.0.0.1:53:53/tcp
+#      - 127.0.0.1:53:53/udp
+#    cap_add:
+#      - NET_ADMIN
+#    volumes:
+#      - $PWD/dnsmasq/dnsmasq.d/dnsmasq.conf:/etc/dnsmasq.conf
+#    dns:
+#      - 8.8.8.8
+#      - 127.0.0.1
+networks:
+  reverseproxy:
+    external: true
+volumes:
+  caddy-data:
+    driver: "local"
+    name: reverseproxy-data
+  caddy-config:
+    driver: "local"
+    name: reverseproxy-config
